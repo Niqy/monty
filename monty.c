@@ -1,59 +1,41 @@
-#define _GNU_SOURCE
-#include "global.h"
 #include "monty.h"
-char *line;
+
+vars_t *element;
+
 /**
- *main - entry point for monty
- *@argc: the number of command line arguments
- *@argv: the array of command line argument strings
- *
- *Return: 0 always
- */
+  * main - Entry Point
+  * @argc: Number of arguments
+  * @argv: Arguments names
+  * Return: 0 on success, exit on failures
+  */
 int main(int argc, char **argv)
 {
-	stack_t *stack = NULL;
-	int i = 0, j = 0;
-	FILE *file;
-	unsigned int line_number = 0;
-	char *opcode;
-	ssize_t read_chars = 0;
-	size_t size;
+	size_t n = 0;
+	vars_t temp = {0, NULL, NULL, NULL, NULL, NULL, 1};
 
+	element = &temp;
+	element->fname = argv[1];
 	if (argc != 2)
+		exit_function(16);
+
+	element->fp = fopen(argv[1], "r");
+	if (element->fp == NULL)
+		exit_function(1);
+
+	for (; getline(&(element->buf), &n, element->fp) != EOF;
+		element->line_number++)
 	{
-		printf("USAGE: monty file\n");
-		exit(EXIT_FAILURE);
+		element->tokened = malloc(sizeof(char *) * 2);
+		if (element->tokened == NULL)
+			exit_function(3);
+		get_tokens(element->buf);
+		opcode_search();
+		free_buffer();
+		free_token();
 	}
-	file = fopen(argv[1], "r");
-	if (file == NULL)
-	{
-		printf("Error: Can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE);
-	}
-	while (read_chars != -1)
-	{
-		line = NULL;
-		size = 0;
-		i = 0;
-		j = 0;
-		read_chars = getline(&line, &size, file);
-		line_number++;
-		while (line[j] == ' ')
-			j++;
-		if (line[j] == '\n' || line[j] == '#')
-			continue;
-		while (line[i] != '\n' && line[i] != '\0')
-			i++;
-		line[i] = '\0';
-		if (line[0] == '\0')
-			break;
-		opcode = getopcode();
-		compareopcode(&stack, line_number, opcode);
-		free(opcode);
-		free(line);
-	}
-	fclose(file);
-	free(line);
-	free_stack(stack);
+	free_buffer();
+	free_list(element->head);
+	free_token();
+	fclose(element->fp);
 	return (0);
 }
