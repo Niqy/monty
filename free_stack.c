@@ -11,27 +11,27 @@ void exit_function(unsigned int err_num)
 	int ln = element->line_number;
 
 	if (err_num == 1)
-		printf("Error: Can't open file %s\n", element->fname);
+		fprintf(stderr, "Error: Can't open file %s\n", element->fname);
 	if (err_num == 2)
-		printf("L%d: unknown instruction %s\n", ln, element->tokened[0]);
+		fprintf(stderr, "L%d: unknown instruction %s\n", ln, element->tokened[0]);
 	if (err_num == 3)
-		printf("Error: malloc failed\n");
+		fprintf(stderr, "Error: malloc failed\n");
 	if (err_num == 4)
-		printf("L%d: usage: push integer\n", ln);
+		fprintf(stderr, "L%d: usage: push integer\n", ln);
 	if (err_num == 5)
-		printf("L%d: can't pint, stack empty\n", ln);
+		fprintf(stderr, "L%d: can't pint, stack empty\n", ln);
 	if (err_num == 6)
-		printf("L%d: can't pop an empty stack\n", ln);
+		fprintf(stderr, "L%d: can't pop an empty stack\n", ln);
 	if (err_num >= 7 && err_num <= 12)
-		printf("L%d: can't %s, stack too short\n", ln, s[err_num - 7]);
+		fprintf(stderr, "L%d: can't %s, stack too short\n", ln, s[err_num - 7]);
 	if (err_num == 13)
-		printf("L%d: division by zero\n", ln);
+		fprintf(stderr, "L%d: division by zero\n", ln);
 	if (err_num == 14)
-		printf("L%d: can't pchar, value out of range\n", ln);
+		fprintf(stderr, "L%d: can't pchar, value out of range\n", ln);
 	if (err_num == 15)
-		printf("L%d: can't pchar, stack empty\n", ln);
+		fprintf(stderr, "L%d: can't pchar, stack empty\n", ln);
 	if (err_num == 16)
-		printf("USAGE: monty file\n");
+		fprintf(stderr, "USAGE: monty file\n");
 
 	free_buffer();
 	free_list(element->head);
