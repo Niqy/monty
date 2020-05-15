@@ -33,6 +33,8 @@ convert to ascii
  <[<]>-
 ]
 
-print
->>[.<<]<[<<]>>
+product
+>>[.<<]<[<<]>>.
+
+print newline
 <++++++++++.
